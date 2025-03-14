@@ -24,5 +24,6 @@ A meme that captures how I currently feel about my university studies is ![](htt
 </ol>
 
 Here is a link to the [RNZ home page](https://www.rnz.co.nz/).
+Also, here is a link to the [Hamster Dance](https://www.webhamster.com/), which is awesome.
 
 Another cool gif: <br> ![](https://www.icegif.com/wp-content/uploads/2022/12/icegif-81.gif)
