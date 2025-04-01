@@ -40,7 +40,6 @@ img{
 
 ```{r load data from web}
 library(tidyverse)
-library(magick)
 
 logged_data <- read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTx4qzXUuABXzuWuV6l5El_SuSGssLGo5kLCyBQ4uVAHDgKR9rjXpteaypJ_-aknNHhEc-zbg9XfSMS/pub?output=csv")
 ```
