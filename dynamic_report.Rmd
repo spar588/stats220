@@ -115,12 +115,12 @@ bird_image_url <- c("Sparrow" = "https://gardenbirdsurvey.nz/wp-content/uploads/
                     "Song Thrush" = "https://gardenbirdsurvey.nz/wp-content/uploads/2022/02/Song-Thrush_Tom-Marshall.jpg",
                     "Myna" = " https://gardenbirdsurvey.nz/wp-content/uploads/2022/02/Myna_ashley-bradford.jpg",
                     "Duck" = "https://www.nzbirdsonline.org.nz/assets/95597/1691027917-mallarddrake_d803620-1024web.jpg",
-                    "Pukeko" = "https://www.nzbirdsonline.org.nz/assets/95597/1691019412-28087715254_40361f0f45_o.jpg",
+                    "Pūkeko" = "https://www.nzbirdsonline.org.nz/assets/95597/1691019412-28087715254_40361f0f45_o.jpg",
                     "Goose" = "https://www.nzbirdsonline.org.nz/assets/95597/1691027668-branta-canadensis-maxima_0561.jpg",
                     "Starling" = "https://gardenbirdsurvey.nz/wp-content/uploads/cache/2022/02/Starling_Andrew-Walmsley/2383985721.jpg",
                     "Parrot" = "https://www.nzbirdsonline.org.nz/assets/95597/1691021702-sulphur-crested-20cockatoo-2cred-20hill-2c230316-2c-59webnz.jpg",
-                    "Tui" = "https://gardenbirdsurvey.nz/wp-content/uploads/cache/2022/02/Tui_istock/3229547564.jpg",
-                    "Kereru" = "https://gardenbirdsurvey.nz/wp-content/uploads/cache/2022/02/kereru/999649717.jpg",
+                    "Tūī" = "https://gardenbirdsurvey.nz/wp-content/uploads/cache/2022/02/Tui_istock/3229547564.jpg",
+                    "Kererū" = "https://gardenbirdsurvey.nz/wp-content/uploads/cache/2022/02/kereru/999649717.jpg",
                     "Magpie" = "https://gardenbirdsurvey.nz/wp-content/uploads/cache/2022/02/magpie/1480257895.jpeg",
                     "Morepork" = "https://www.nzbirdsonline.org.nz/assets/95597/1691022045-morepork.jpg",
                     "Albatross" = "https://www.nzbirdsonline.org.nz/assets/95597/1691015452-c6ea5c1a8dfdaa06db826b097a4bb354.jpg",
@@ -136,10 +136,14 @@ bird_image_url <- c("Sparrow" = "https://gardenbirdsurvey.nz/wp-content/uploads/
                     "Silvereye" = "https://gardenbirdsurvey.nz/wp-content/uploads/2022/02/silvereye-bernard-spragg-CC0.jpg",
                     "Swallow" = "https://gardenbirdsurvey.nz/wp-content/uploads/2022/02/Welcome-Swallow_Tom-Marshall.jpg",
                     "Yellowhammer" = "https://gardenbirdsurvey.nz/wp-content/uploads/2022/02/Yellowhammer_Female_Jacqui-nz.jpg",
-                    "Other")
+                    "Other" = "https://www.doc.govt.nz/thumbs/hero/contentassets/a450e32f0b824531858d566404c21884/southern-brown-kiwi-tokoeka-stewart-island-photo-credit-alina-thiebes1920.jpg")
 
 bird_count <- table(latest_data$bird_species)
 bird_popular <- names(bird_count)[bird_count == max(bird_count)][1]
+
+if (bird_popular %in% names(bird_image_url) == FALSE){
+  bird_popular <- "Other"
+}
 ```
 The *most sighted bird* was `r bird_popular`
 ![](`r bird_image_url[bird_popular]`)
