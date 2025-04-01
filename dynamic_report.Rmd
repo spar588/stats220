@@ -17,7 +17,7 @@ body{
 }
 
 h1{
-  font-size: 50px;
+  font-size: 40px;
   color: #773500;
   padding: 20px;
 }
@@ -35,13 +35,13 @@ img{
 ```
 
 ## The birds that we see
-Please use the [Google Form](https://docs.google.com/forms/d/e/1FAIpQLScgybeB-9-E7fYm5M5gHgDgXb9qooWQTn-vWCsHPPoPZFkFKw/viewform?usp=header) to record any bird sightings that you see.
 
-This website explores the different birds that you may find around the city of Auckland, and sees what patterns they might follow. From flying through the sky on a hot sunny day, or staying in the trees on a windy afternoon, the data recorded can let us see what these important creatues to our ecosystem, are doing.
 <!---You need to change the contents of this Rmd! Replace the R code and markdown give below in this template document.--->
 
 ```{r load data from web}
 library(tidyverse)
+library(magick)
+
 logged_data <- read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTx4qzXUuABXzuWuV6l5El_SuSGssLGo5kLCyBQ4uVAHDgKR9rjXpteaypJ_-aknNHhEc-zbg9XfSMS/pub?output=csv")
 ```
 ```{r rename variables}
@@ -69,6 +69,9 @@ latest_data$bird_species[latest_data$bird_species == "Blackbird (female)"] <- "B
 latest_data$bird_species[latest_data$bird_species == "Blackbird (male)"] <- "Blackbird"
 latest_data$bird_species[latest_data$bird_species == "Chaffinch (female)"] <- "Chaffinch"
 latest_data$bird_species[latest_data$bird_species == "Chaffinch (male)"] <- "Chaffinch"
+latest_data$bird_species[latest_data$bird_species == "Mallard Duck"] <- "Duck"
+latest_data$bird_species[latest_data$bird_species == "Grey Duck"] <- "Duck"
+latest_data$bird_species[latest_data$bird_species == "Rosella (Eastern)"] <- "Rosella"
 ```
 ```{r summary values}
 # The average temperature across all records is:
@@ -105,6 +108,42 @@ latest_data %>%
        x = "Bird species",
        y = "Count")
 ```
+```{r}
+bird_image_url <- c("Sparrow" = "https://gardenbirdsurvey.nz/wp-content/uploads/2022/02/Dunnock_istock.jpg",
+                    "Pidgeon" = "https://gardenbirdsurvey.nz/wp-content/uploads/2022/02/Rock-Pigeon_Andrew-Walmsley.jpg",
+                    "Gull" = "https://gardenbirdsurvey.nz/wp-content/uploads/cache/2022/02/Black-Backed-Gull_Paddy-Kemner/285460450.jpg",
+                    "Blackbird" = "https://gardenbirdsurvey.nz/wp-content/uploads/cache/2022/02/Blackbird_Male_Andrew-Walmsley/2895393885.jpg",
+                    "Song Thrush" = "https://gardenbirdsurvey.nz/wp-content/uploads/2022/02/Song-Thrush_Tom-Marshall.jpg",
+                    "Myna" = " https://gardenbirdsurvey.nz/wp-content/uploads/2022/02/Myna_ashley-bradford.jpg",
+                    "Duck" = "https://www.nzbirdsonline.org.nz/assets/95597/1691027917-mallarddrake_d803620-1024web.jpg",
+                    "Pukeko" = "https://www.nzbirdsonline.org.nz/assets/95597/1691019412-28087715254_40361f0f45_o.jpg",
+                    "Goose" = "https://www.nzbirdsonline.org.nz/assets/95597/1691027668-branta-canadensis-maxima_0561.jpg",
+                    "Starling" = "https://gardenbirdsurvey.nz/wp-content/uploads/cache/2022/02/Starling_Andrew-Walmsley/2383985721.jpg",
+                    "Parrot" = "https://www.nzbirdsonline.org.nz/assets/95597/1691021702-sulphur-crested-20cockatoo-2cred-20hill-2c230316-2c-59webnz.jpg",
+                    "Tui" = "https://gardenbirdsurvey.nz/wp-content/uploads/cache/2022/02/Tui_istock/3229547564.jpg",
+                    "Kereru" = "https://gardenbirdsurvey.nz/wp-content/uploads/cache/2022/02/kereru/999649717.jpg",
+                    "Magpie" = "https://gardenbirdsurvey.nz/wp-content/uploads/cache/2022/02/magpie/1480257895.jpeg",
+                    "Morepork" = "https://www.nzbirdsonline.org.nz/assets/95597/1691022045-morepork.jpg",
+                    "Albatross" = "https://www.nzbirdsonline.org.nz/assets/95597/1691015452-c6ea5c1a8dfdaa06db826b097a4bb354.jpg",
+                    "Bellbird" = "https://gardenbirdsurvey.nz/wp-content/uploads/cache/2022/02/Bellbird_Andrew-Walmsley-002/3369328103.jpg",
+                    "Chaffinch" = "https://gardenbirdsurvey.nz/wp-content/uploads/cache/2022/02/Chaffinch_Male_Jonothan-Harrod/2317722682.jpg",
+                    "Fantail" = "https://gardenbirdsurvey.nz/wp-content/uploads/2022/02/Fantail_istock.jpg",
+                    "Goldfinch" = "https://gardenbirdsurvey.nz/wp-content/uploads/2022/02/Goldfinch_Tom-Marshall.jpg",
+                    "Greenfinch" = "https://gardenbirdsurvey.nz/wp-content/uploads/2022/02/Greenfinch-Female_istock.jpg",
+                    "Grey Warbler" = "https://gardenbirdsurvey.nz/wp-content/uploads/2022/02/Grey-Warbler_-Satyaki-Hosmane.jpg",
+                    "Heron" = "https://www.doc.govt.nz/thumbs/hero/contentassets/40c9692610874062b2ba71e542a2419f/white-heron-1920-3.jpg",
+                    "Penguin" = "https://www.doc.govt.nz/thumbs/hero/contentassets/4d245bc7f1874034a2dfbc26538ae7b5/fiordland-crested-penguin-a-walmsley-1920-3.jpg",
+                    "Rosella" = "https://gardenbirdsurvey.nz/wp-content/uploads/cache/2022/02/Rosella_istock/2422901731.jpg",
+                    "Silvereye" = "https://gardenbirdsurvey.nz/wp-content/uploads/2022/02/silvereye-bernard-spragg-CC0.jpg",
+                    "Swallow" = "https://gardenbirdsurvey.nz/wp-content/uploads/2022/02/Welcome-Swallow_Tom-Marshall.jpg",
+                    "Yellowhammer" = "https://gardenbirdsurvey.nz/wp-content/uploads/2022/02/Yellowhammer_Female_Jacqui-nz.jpg",
+                    "Other")
+
+bird_count <- table(latest_data$bird_species)
+bird_popular <- names(bird_count)[bird_count == max(bird_count)][1]
+```
+The *most sighted bird* was `r bird_popular`
+![](`r bird_image_url[bird_popular]`)
 
 Here is a bar plot showing the different temperatures recorded for the amount of birds seen:
 
@@ -112,11 +151,10 @@ Here is a bar plot showing the different temperatures recorded for the amount of
 # Bar plot to show the different temperatures observed
 latest_data %>%
   ggplot() +
-  geom_bar(aes(x=temperature),
-           fill="#DD4400") +
+  geom_bar(aes(x = temperature,
+               fill = bird_species)) +
   labs(title = "Number of birds seen at different temperatures",
        x = "Temperature (degrees Celsius)",
-       y = "Number of birds seen")
+       y = "Number of birds seen") +
+  scale_fill_brewer(palette = "BrBG")
 ```
-
-
