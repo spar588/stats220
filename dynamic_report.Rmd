@@ -1,0 +1,120 @@
+---
+title: My dynamic report
+output: html_fragment
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, error=FALSE)
+
+```
+
+```{css}
+body{
+  font-family: arial;
+  font-size: 18px;
+  background-color: #EEEEEE;
+  color: black;
+}
+
+h1{
+  font-size: 40px;
+  color: #773500;
+  padding: 20px;
+}
+
+h2{
+  font-size: 28px;
+  color: #19AA54;
+  padding: 15px;
+}
+
+img{
+  display: block;
+  margin: auto;
+}
+```
+
+## The birds that we see
+
+<!---You need to change the contents of this Rmd! Replace the R code and markdown give below in this template document.--->
+
+```{r load data from web}
+library(tidyverse)
+logged_data <- read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTx4qzXUuABXzuWuV6l5El_SuSGssLGo5kLCyBQ4uVAHDgKR9rjXpteaypJ_-aknNHhEc-zbg9XfSMS/pub?output=csv")
+```
+```{r rename variables}
+latest_data <- logged_data %>%
+  rename(date = 2,
+         weather = 3,
+         post_code = 4,
+         setting = 5,
+         bird_species = 6,
+         temperature = 7)
+
+# split date into date and time
+date_time_placeholder <- strsplit(as.character(latest_data$date), " ")
+
+date_time_df <- do.call(rbind, date_time_placeholder) %>%
+  data.frame()
+
+latest_data$date <- date_time_df[1]
+latest_data$time <- date_time_df[2]
+
+# group blackbird (female and male), chaffinch (female and male), and sparrow (hedge and house)
+latest_data$bird_species[latest_data$bird_species == "Sparrow (House)"] <- "Sparrow"
+latest_data$bird_species[latest_data$bird_species == "Sparrow (Hedge)"] <- "Sparrow"
+latest_data$bird_species[latest_data$bird_species == "Blackbird (female)"] <- "Blackbird"
+latest_data$bird_species[latest_data$bird_species == "Blackbird (male)"] <- "Blackbird"
+latest_data$bird_species[latest_data$bird_species == "Chaffinch (female)"] <- "Chaffinch"
+latest_data$bird_species[latest_data$bird_species == "Chaffinch (male)"] <- "Chaffinch"
+```
+```{r summary values}
+# The average temperature across all records is:
+mean_temp <- mean(latest_data$temperature)
+
+# The record with the most amount of weather events at once was:
+# Below code was inspired by Zach Bobbit, Statsology, 2024 (https://www.statology.org/r-count-occurrences-of-character-in-string/)
+weather_most <- regmatches(latest_data$weather, gregexpr(",", latest_data$weather)) %>%
+  lengths() %>%
+  max()
+
+weather_most_words <- latest_data$weather[which(lengths(regmatches(latest_data$weather, gregexpr(", ", latest_data$weather))) == weather_most)][1]
+
+# The number of unique bird species spotted was:
+unique_birds <- latest_data$bird_species %>%
+  unique() %>%
+  length()
+```
+Interesting findings:
+
+* The **average temperature** from the bird sightings was `r mean_temp`.
+* The **most weather phenomena observed** at once was `r weather_most`, which included `r weather_most_words`.
+* The number of **unique birds** sighted was `r unique_birds`.
+
+Here is a bar plot which shows the different bird species sighted:
+
+```{r fig.width=12, fig.height=4}
+# Bar plot to show the different bird species seen
+latest_data %>%
+  ggplot() +
+  geom_bar(aes(x=bird_species),
+           fill="#88FF99") +
+  labs(title = "Count of bird species",
+       x = "Bird species",
+       y = "Count")
+```
+
+Here is a bar plot showing the different temperatures recorded for the amount of birds seen:
+
+```{r fig.width=12, fig.height=4}
+# Bar plot to show the different temperatures observed
+latest_data %>%
+  ggplot() +
+  geom_bar(aes(x=temperature),
+           fill="#DD4400") +
+  labs(title = "Number of birds seen at different temperatures",
+       x = "Temperature (degrees Celsius)",
+       y = "Number of birds seen")
+```
+
+
