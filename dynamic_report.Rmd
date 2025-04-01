@@ -35,8 +35,7 @@ img{
 ```
 
 ## The birds that we see
-![](https://cdn.dribbble.com/users/1201194/screenshots/17333056/media/904e0e84c11fd9ec8afbf219c022c3f6.gif)
-Please use the ![Google Form](https://docs.google.com/forms/d/e/1FAIpQLScgybeB-9-E7fYm5M5gHgDgXb9qooWQTn-vWCsHPPoPZFkFKw/viewform?usp=header) to record any bird sightings that you see.
+Please use the [Google Form](https://docs.google.com/forms/d/e/1FAIpQLScgybeB-9-E7fYm5M5gHgDgXb9qooWQTn-vWCsHPPoPZFkFKw/viewform?usp=header) to record any bird sightings that you see.
 
 This website explores the different birds that you may find around the city of Auckland, and sees what patterns they might follow. From flying through the sky on a hot sunny day, or staying in the trees on a windy afternoon, the data recorded can let us see what these important creatues to our ecosystem, are doing.
 <!---You need to change the contents of this Rmd! Replace the R code and markdown give below in this template document.--->
