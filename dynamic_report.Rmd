@@ -91,7 +91,7 @@ unique_birds <- latest_data$bird_species %>%
 ```
 Interesting findings:
 
-* The **average temperature** from the bird sightings was `r mean_temp`.
+* The **average temperature** from the bird sightings was `r round(mean_temp, 1)`° Celsius.
 * The **most weather phenomena observed** at once was `r weather_most + 1`, which included `r weather_most_words`.
 * The number of **unique birds** sighted was `r unique_birds`.
 
