@@ -55,6 +55,7 @@ logged_data <- logged_data %>%
          bird_species = 5,
          temperature = 6)
 
+# group blackbird (female and male), chaffinch (female and male), and sparrow (hedge and house)
 logged_data <- logged_data %>%
   mutate(bird_species = case_when(str_detect(bird_species, "Sparrow") ~ "Sparrow",
                                   str_detect(bird_species, "Blackbird") ~ "Blackbird",
@@ -65,32 +66,21 @@ logged_data <- logged_data %>%
 
 logged_data <- logged_data %>%
   mutate(Timestamp = dmy_hms(Timestamp))
-
-# group blackbird (female and male), chaffinch (female and male), and sparrow (hedge and house)
-latest_data$bird_species[latest_data$bird_species == "Sparrow (House)"] <- "Sparrow"
-latest_data$bird_species[latest_data$bird_species == "Sparrow (Hedge)"] <- "Sparrow"
-latest_data$bird_species[latest_data$bird_species == "Blackbird (female)"] <- "Blackbird"
-latest_data$bird_species[latest_data$bird_species == "Blackbird (male)"] <- "Blackbird"
-latest_data$bird_species[latest_data$bird_species == "Chaffinch (female)"] <- "Chaffinch"
-latest_data$bird_species[latest_data$bird_species == "Chaffinch (male)"] <- "Chaffinch"
-latest_data$bird_species[latest_data$bird_species == "Mallard Duck"] <- "Duck"
-latest_data$bird_species[latest_data$bird_species == "Grey Duck"] <- "Duck"
-latest_data$bird_species[latest_data$bird_species == "Rosella (Eastern)"] <- "Rosella"
 ```
 ```{r summary values}
 # The average temperature across all records is:
-mean_temp <- mean(latest_data$temperature)
+mean_temp <- mean(logged_data$temperature)
 
 # The record with the most amount of weather events at once was:
 # Below code was inspired by Zach Bobbit, Statsology, 2024 (https://www.statology.org/r-count-occurrences-of-character-in-string/)
-weather_most <- regmatches(latest_data$weather, gregexpr(",", latest_data$weather)) %>%
+weather_most <- regmatches(logged_data$weather, gregexpr(",", logged_data$weather)) %>%
   lengths() %>%
   max()
 
-weather_most_words <- latest_data$weather[which(lengths(regmatches(latest_data$weather, gregexpr(", ", latest_data$weather))) == weather_most)][1]
+weather_most_words <- logged_data$weather[which(lengths(regmatches(logged_data$weather, gregexpr(", ", logged_data$weather))) == weather_most)][1]
 
 # The number of unique bird species spotted was:
-unique_birds <- latest_data$bird_species %>%
+unique_birds <- logged_data$bird_species %>%
   unique() %>%
   length()
 ```
@@ -104,7 +94,7 @@ Here is a bar plot which shows the different bird species sighted:
 
 ```{r fig.width=12, fig.height=4}
 # Bar plot to show the different bird species seen
-latest_data %>%
+logged_data %>%
   ggplot() +
   geom_bar(aes(x=bird_species),
            fill="#88FF99") +
@@ -143,7 +133,7 @@ bird_image_url <- c("Sparrow" = "https://gardenbirdsurvey.nz/wp-content/uploads/
                     "Yellowhammer" = "https://gardenbirdsurvey.nz/wp-content/uploads/2022/02/Yellowhammer_Female_Jacqui-nz.jpg",
                     "Other" = "https://www.doc.govt.nz/thumbs/hero/contentassets/a450e32f0b824531858d566404c21884/southern-brown-kiwi-tokoeka-stewart-island-photo-credit-alina-thiebes1920.jpg")
 
-bird_count <- table(latest_data$bird_species)
+bird_count <- table(logged_data$bird_species)
 bird_popular <- names(bird_count)[bird_count == max(bird_count)][1]
 
 if (bird_popular %in% names(bird_image_url) == FALSE){
@@ -157,7 +147,7 @@ Here is a bar plot showing the different temperatures recorded for the amount of
 
 ```{r fig.width=12, fig.height=4}
 # Bar plot to show the different temperatures observed
-latest_data %>%
+logged_data %>%
   ggplot() +
   geom_bar(aes(x = temperature,
                fill = bird_species)) +
@@ -166,5 +156,3 @@ latest_data %>%
        y = "Number of birds seen") +
   scale_fill_brewer(palette = "BrBG")
 ```
-
-
