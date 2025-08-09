@@ -43,23 +43,26 @@ library(tidyverse)
 
 logged_data <- read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTx4qzXUuABXzuWuV6l5El_SuSGssLGo5kLCyBQ4uVAHDgKR9rjXpteaypJ_-aknNHhEc-zbg9XfSMS/pub?output=csv")
 ```
-```{r rename variables}
-latest_data <- logged_data %>%
-  rename(date = 2,
-         weather = 3,
-         post_code = 4,
-         setting = 5,
-         bird_species = 6,
-         temperature = 7)
+```{r rename variables}logged_data <- logged_data[-2]
 
-# split date into date and time
-date_time_placeholder <- strsplit(as.character(latest_data$date), " ")
+# Renaming the variables in the `logged_data` dataframe.
+logged_data <- logged_data %>%
+  rename(weather = 2,
+         post_code = 3,
+         setting = 4,
+         bird_species = 5,
+         temperature = 6)
 
-date_time_df <- do.call(rbind, date_time_placeholder) %>%
-  data.frame()
+logged_data <- logged_data %>%
+  mutate(bird_species = case_when(str_detect(bird_species, "Sparrow") ~ "Sparrow",
+                                  str_detect(bird_species, "Blackbird") ~ "Blackbird",
+                                  str_detect(bird_species, "Chaffinch") ~ "Chaffinch",
+                                  str_detect(bird_species, "Rosella") ~ "Rosella",
+                                  str_detect(bird_species, "Pidgeon") ~ "Pigeon",
+                                  TRUE ~ bird_species))
 
-latest_data$date <- date_time_df[1]
-latest_data$time <- date_time_df[2]
+logged_data <- logged_data %>%
+  mutate(Timestamp = dmy_hms(Timestamp))
 
 # group blackbird (female and male), chaffinch (female and male), and sparrow (hedge and house)
 latest_data$bird_species[latest_data$bird_species == "Sparrow (House)"] <- "Sparrow"
@@ -161,3 +164,4 @@ latest_data %>%
        y = "Number of birds seen") +
   scale_fill_brewer(palette = "BrBG")
 ```
+
