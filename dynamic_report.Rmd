@@ -43,7 +43,9 @@ library(tidyverse)
 
 logged_data <- read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTx4qzXUuABXzuWuV6l5El_SuSGssLGo5kLCyBQ4uVAHDgKR9rjXpteaypJ_-aknNHhEc-zbg9XfSMS/pub?output=csv")
 ```
-```{r rename variables}logged_data <- logged_data[-2]
+```{r rename variables}
+# Remove second column (which asked for manual time stamp input)
+logged_data <- logged_data[-2]
 
 # Renaming the variables in the `logged_data` dataframe.
 logged_data <- logged_data %>%
@@ -164,4 +166,5 @@ latest_data %>%
        y = "Number of birds seen") +
   scale_fill_brewer(palette = "BrBG")
 ```
+
 
